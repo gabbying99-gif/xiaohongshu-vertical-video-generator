@@ -1,0 +1,4 @@
+interface:
+  display_name: "小红书竖屏视频生成skill"
+  short_description: "制作9:16小红书竖屏短视频并同步生成发布文案TXT文件"
+  default_prompt: "Use $xiaohongshu-vertical-video-generator to turn this source video into one or more Xiaohongshu vertical short videos and matching publish-copy TXT files."
