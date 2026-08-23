@@ -53,12 +53,12 @@ Before writing a benchmark link, try to resolve the source page and download ava
 - For Xiaohongshu, inspect meta tags, JSON-LD, and embedded state payloads for `og:video`, `contentUrl`, `mediaV2`, `master_url`, `subtitles`, `tagList`, `desc`, `interactInfo`, `duration`, `time`, and cover image URLs.
 - Save downloaded files under `D:\Codex\xhs-content-assets\downloads\xhs_<work_id>\` or `D:\Codex\xhs-content-assets\downloads\douyin_<work_id>\` by default.
 - If D: is unavailable, save under the current workspace `downloads/` folder and explicitly report the fallback path.
-- Prefer stable filenames: `video.mp4`, `cover.jpg` or `cover.png`, `subtitle_zh-CN.srt`, `subtitle_en-US.srt`.
+- Prefer stable filenames: `video.mp4`, `cover.jpg` or `cover.png`, `subtitle_zh-CN.srt`, `subtitle_en-US.srt`, and `transcript.txt`.
 - Upload downloaded videos to the `视频` attachment field when present.
-- Upload subtitle files to the `逐字稿文件` attachment field when present.
+- Convert subtitle files into plain readable text and save `transcript.txt`; upload `transcript.txt` to the `逐字稿文件` attachment field when present. Keep `.srt` files locally as source files, but do not rely on `.srt` as the only Base attachment because Feishu may not preview it.
 - Upload cover images to the `封面` attachment field when present.
 - Convert subtitle files into plain readable text and write it into `逐字稿`.
-- Write source tags into `标签`; use platform tags, not invented analysis tags, unless the user explicitly asks for suggested tags.
+- Keep original platform hashtags in `正文`. Write `标签` as useful content-factory retrieval tags, such as topic, emotion, format, use case, and account-fit tags. Do not use irrelevant platform tags like `英文` as the only tagging strategy unless they are genuinely useful for later creation.
 - Write real metrics, duration, publish time, description, and interaction collection time only when found in the page/source data.
 
 Useful `01` fields:
