@@ -51,7 +51,8 @@ Before writing a benchmark link, try to resolve the source page and download ava
 
 - Fetch the shared page with a browser-like user agent and a referer from the source platform.
 - For Xiaohongshu, inspect meta tags, JSON-LD, and embedded state payloads for `og:video`, `contentUrl`, `mediaV2`, `master_url`, `subtitles`, `tagList`, `desc`, `interactInfo`, `duration`, `time`, and cover image URLs.
-- Save downloaded files under `downloads/xhs_<work_id>/` or `downloads/douyin_<work_id>/`.
+- Save downloaded files under `D:\Codex\xhs-content-assets\downloads\xhs_<work_id>\` or `D:\Codex\xhs-content-assets\downloads\douyin_<work_id>\` by default.
+- If D: is unavailable, save under the current workspace `downloads/` folder and explicitly report the fallback path.
 - Prefer stable filenames: `video.mp4`, `cover.jpg` or `cover.png`, `subtitle_zh-CN.srt`, `subtitle_en-US.srt`.
 - Upload downloaded videos to the `视频` attachment field when present.
 - Upload subtitle files to the `逐字稿文件` attachment field when present.
