@@ -1,6 +1,6 @@
 ---
 name: xhs-content-factory
-description: "Use this skill when the user wants Codex to operate their Xiaohongshu/short-video content factory in Feishu Base: ingest movie or travel life-material into 00, archive Xiaohongshu/Douyin benchmark videos into 01, analyze and split benchmark videos into 02, generate original scripts in 03, create shooting/material prep in 04, create editing execution tasks in 05, or review published performance. Trigger on Chinese requests such as 入库这个对标视频, 只入01, 入01并拉片, 生成仿写稿, 流转到03, 拆成拍摄清单, 更新复盘, 小红书内容工厂, or 生命力素材池."
+description: "Use this skill when the user wants Codex to operate their Xiaohongshu/short-video content factory in Feishu Base: ingest movie or travel life-material into 00, archive Xiaohongshu/Douyin benchmark videos into 01, download video/subtitle/cover assets from shared links when available, analyze and split benchmark videos into 02, generate original scripts in 03, create shooting/material prep in 04, create editing execution tasks in 05, or review published performance. Trigger on Chinese requests such as 入库这个对标视频, 下载这个小红书视频, 补逐字稿和标签, 只入01, 入01并拉片, 生成仿写稿, 流转到03, 拆成拍摄清单, 更新复盘, 小红书内容工厂, or 生命力素材池."
 ---
 
 # XHS Content Factory
@@ -27,6 +27,12 @@ Use the `lark-base` workflow for all Feishu Base operations:
 
 Read `references/factory-workflows.md` when deciding where content should go or how to map fields.
 
+## Link Asset Handling
+
+When the user provides a Xiaohongshu or Douyin benchmark link, attempt to resolve and download available source assets before treating transcript, tags, cover, duration, or metrics as missing.
+
+For Xiaohongshu web links, first fetch the shared page with a browser-like user agent and parse available metadata from HTML/JSON-LD/state payloads: title, author, description, tags, interaction counts, duration, video URL, cover URL, and subtitle URLs. Download available video/subtitle/cover files into a local `downloads/<platform>_<work_id>/` folder, then upload those files to matching Base attachment fields when the table has them. If parsing or downloading fails because of login, anti-bot, expired links, or network limits, archive the benchmark with known fields and ask the user for the video file, screenshots, transcript, or a fresh link.
+
 ## Routing
 
 Route user requests by intent:
@@ -45,7 +51,7 @@ If a request is ambiguous, choose the safest minimal action and state what was n
 ## Content Principles
 
 - Preserve raw user material. Put polishing, analysis, and adapted drafts into separate fields.
-- Do not invent platform metrics, transcript text, screenshots, or video duration. If the link is inaccessible, ask for the video file, screenshots, transcript, or data screenshot.
+- Do not invent platform metrics, transcript text, screenshots, or video duration. First try to extract/download them from the source link; if the link is inaccessible, ask for the video file, screenshots, transcript, or data screenshot.
 - Keep the user's account positioning in mind: a lively, high-empathy creator account. Do not force every life-material item into a technical tutorial.
 - For `00`, keep the source limited to movie and travel unless the user explicitly expands the system.
 - For `01`, treat content as external benchmark material only; it is not the user's own life material.

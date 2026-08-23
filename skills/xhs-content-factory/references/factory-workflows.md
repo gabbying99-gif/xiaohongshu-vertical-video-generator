@@ -47,6 +47,19 @@ Use when the user says:
 
 For `只入01`, write only to `01｜对标视频库`.
 
+Before writing a benchmark link, try to resolve the source page and download available assets:
+
+- Fetch the shared page with a browser-like user agent and a referer from the source platform.
+- For Xiaohongshu, inspect meta tags, JSON-LD, and embedded state payloads for `og:video`, `contentUrl`, `mediaV2`, `master_url`, `subtitles`, `tagList`, `desc`, `interactInfo`, `duration`, `time`, and cover image URLs.
+- Save downloaded files under `downloads/xhs_<work_id>/` or `downloads/douyin_<work_id>/`.
+- Prefer stable filenames: `video.mp4`, `cover.jpg` or `cover.png`, `subtitle_zh-CN.srt`, `subtitle_en-US.srt`.
+- Upload downloaded videos to the `视频` attachment field when present.
+- Upload subtitle files to the `逐字稿文件` attachment field when present.
+- Upload cover images to the `封面` attachment field when present.
+- Convert subtitle files into plain readable text and write it into `逐字稿`.
+- Write source tags into `标签`; use platform tags, not invented analysis tags, unless the user explicitly asks for suggested tags.
+- Write real metrics, duration, publish time, description, and interaction collection time only when found in the page/source data.
+
 Useful `01` fields:
 
 - `标题`
@@ -64,6 +77,8 @@ Useful `01` fields:
 - `已创建口播记录`: usually `false`
 
 Leave unknown fields blank. Never invent metrics.
+
+If the source page exposes only partial data, write the partial data and report what was not captured. If a download fails after retrying, keep the record and tell the user exactly what file is missing.
 
 ### Benchmark shot breakdown
 
@@ -122,7 +137,7 @@ When a Xiaohongshu link cannot be accessed directly, still archive the benchmark
 - Work ID parsed from the URL path
 - Share code or raw share text stored in `正文`
 
-Tell the user that transcript, metrics, cover, and video assets were not captured.
+Tell the user that transcript, metrics, cover, and video assets were not captured only after attempting source-link extraction/download. Do not skip the download attempt for video benchmarks unless the user explicitly says not to download.
 
 ## Response Template
 
