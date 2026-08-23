@@ -1,0 +1,4 @@
+﻿interface:
+  display_name: "小红书内容工厂"
+  short_description: "用飞书 Base 管理小红书素材、对标、成稿和复盘"
+  default_prompt: "Use $xhs-content-factory to decide where this素材/对标 should go and write it into the Feishu Base."
