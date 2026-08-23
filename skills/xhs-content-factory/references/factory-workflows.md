@@ -54,12 +54,13 @@ Before writing a benchmark link, try to resolve the source page and download ava
 - For Xiaohongshu, inspect meta tags, JSON-LD, and embedded state payloads for `og:video`, `contentUrl`, `mediaV2`, `master_url`, `subtitles`, `tagList`, `desc`, `interactInfo`, `duration`, `time`, and cover image URLs.
 - Save downloaded files under `D:\Codex\xhs-content-assets\downloads\xhs_<work_id>\` or `D:\Codex\xhs-content-assets\downloads\douyin_<work_id>\` by default.
 - If D: is unavailable, save under the current workspace `downloads/` folder and explicitly report the fallback path.
-- Prefer stable filenames: `video.mp4`, `cover.jpg` or `cover.png`, `subtitle_zh-CN.srt`, `subtitle_en-US.srt`, and `transcript.txt`.
+- Prefer stable filenames: `video.mp4`, `cover.jpg` or `cover.png`, `audio_16k.wav`, `subtitle_zh-CN.srt`, `subtitle_en-US.srt`, `transcript.txt`, and `transcript_segments.json`.
 - Upload downloaded videos to the `视频` attachment field when present.
 - Convert subtitle files into plain readable text and save `transcript.txt`; upload `transcript.txt` to the `逐字稿文件` attachment field when present. Keep `.srt` files locally as source files, but do not rely on `.srt` as the only Base attachment because Feishu may not preview it.
 - Upload cover images to the `封面` attachment field when present.
 - Convert subtitle files into plain readable text and write it into `逐字稿`.
-- If no real subtitle/transcript source is exposed, leave `逐字稿` and `逐字稿文件` blank; do not infer a transcript from title, description, comments, or visual guesses. Continue capturing other real metadata and assets, and tell the user that ASR/video transcription is needed to fill the transcript later.
+- If no real subtitle/transcript source is exposed but `video.mp4` is available, use a local ASR fallback: extract `audio_16k.wav` with ffmpeg, transcribe the audio with Whisper/faster-whisper or another available ASR tool, save `transcript.txt` and `transcript_segments.json`, upload `transcript.txt` to `逐字稿文件`, and write the transcript into `逐字稿` with an `ASR逐字稿` marker. If ASR tooling is missing, install or create it under `D:\Codex\tools\xhs-asr` when the user has allowed tool setup.
+- If neither platform subtitles nor ASR are available, leave `逐字稿` and `逐字稿文件` blank; do not infer a transcript from title, description, comments, or visual guesses.
 - Keep original platform hashtags in `正文`. Write `标签` as useful content-factory retrieval tags, such as topic, emotion, format, use case, and account-fit tags. Do not use irrelevant platform tags like `英文` as the only tagging strategy unless they are genuinely useful for later creation.
 - Write real metrics, duration, publish time, description, and interaction collection time only when found in the page/source data.
 
