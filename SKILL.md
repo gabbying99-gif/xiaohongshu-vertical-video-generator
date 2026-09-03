@@ -14,6 +14,8 @@ Turn one source into two synchronized deliverables: a mobile-ready vertical MP4 
 - When given a long source, select a coherent 60-120 second segment by default. Prefer clear speech, a complete micro-topic, and strong opening value.
 - When one source contains multiple strong, non-overlapping micro-topics, create 2-3 independent episodes. Give each episode its own clip range, title, subtitles, vocabulary, MP4, and publish-copy TXT; do not split merely to reach a target count.
 - For language-learning content, preserve the complete subtitle sequence within the selected range and use 6-8 clip-supported vocabulary items.
+- When the original video shows the protagonist speaking on camera or keeps the source spoken audio, subtitles must follow the original SRT verbatim for the spoken language, then add a natural Chinese translation. Do not replace spoken subtitles with rewritten, condensed, or teaching-summary sentences.
+- Hard rule for talking-head/original-audio clips: the selected video source start and the selected subtitle source start must be the same source timestamp. Never shift subtitles by guessing from the rendered clip alone. If the clip starts at source 0:00, include the SRT cues from source 0:00; if the clip starts at source 12.06, include the SRT cues from source 12.06.
 - Save deliverables under `D:\双语\<source-video-id>_小红书竖屏视频\` by default. For example, source `nZ72qntioZI` uses `D:\双语\nZ72qntioZI_小红书竖屏视频\`. Use another location only when the user explicitly requests it.
 - Ask only for information that cannot be inferred safely. Do not require Feishu documents or knowledge-base configuration.
 
@@ -22,11 +24,16 @@ Turn one source into two synchronized deliverables: a mobile-ready vertical MP4 
 1. Inspect the source and resolve title, duration, dimensions, audio, language, subtitle tracks, and existing episode metadata.
 2. Acquire or align timestamped subtitles. Prefer human subtitles, then automatic captions, then ASR. Translate naturally when bilingual subtitles are needed.
 3. Select or reuse the clip. Record exact start and end times and include every subtitle row that overlaps the range.
-4. Read [references/video-and-copy-spec.md](references/video-and-copy-spec.md) before composing or rendering.
-5. Render the 9:16 MP4 with readable mobile typography, bilingual subtitles when applicable, and compact learning points or vocabulary.
-6. Generate the matching publish copy from the actual finished clip; do not draft from unrelated source-video content.
-7. Save the MP4 and TXT side by side with the same basename.
-8. Validate both deliverables and fix blocking issues before reporting completion.
+4. Before rendering, run an alignment check for talking-head/original-audio clips:
+   - Compare the first visible/sounded sentence in the clip with the first subtitle cue.
+   - Compare at least one midpoint cue and one ending cue against the original SRT timing.
+   - Confirm the target-language text is copied cue by cue from the original SRT, not rewritten.
+   - If any check fails, adjust the clip start/end or subtitle source start/end before rendering.
+5. Read [references/video-and-copy-spec.md](references/video-and-copy-spec.md) before composing or rendering.
+6. Render the 9:16 MP4 with readable mobile typography, bilingual subtitles when applicable, and compact learning points or vocabulary.
+7. Generate the matching publish copy from the actual finished clip; do not draft from unrelated source-video content.
+8. Save the MP4 and TXT side by side with the same basename.
+9. Validate both deliverables and fix blocking issues before reporting completion.
 
 ## Required deliverables
 
@@ -69,6 +76,9 @@ Do not add internal production notes, local paths, timestamps, or unsupported cl
 - Put the series title and episode label in a stable header zone.
 - Keep the source video visually dominant. For 16:9 sources, fit or crop deliberately; use a designed background rather than distortion.
 - Put subtitles in a high-contrast band or safe overlay region. Keep target-language text above natural Chinese translation.
+- For talking-head/original-audio clips, keep the target-language subtitle text and timing from the original SRT cue by cue. The Chinese line may be translated naturally, but the target-language line cannot be paraphrased or merged.
+- For talking-head/original-audio clips, do not compress subtitle timing to make text appear faster, and do not stretch timing to make text appear slower. Preserve original SRT cue timing relative to the selected source start. If a cue is too long or visually awkward, split it only when the split still follows the spoken rhythm and preserves all original words in order.
+- If a rendered preview shows the protagonist saying one sentence while the subtitle shows another sentence, treat it as a blocking failure. Do not report completion until the MP4 has been regenerated.
 - For Chinese subtitle overlays, remove punctuation by default and collapse repeated whitespace.
 - Keep vocabulary/learning cards compact and supported by the clip.
 - Respect mobile safe areas; keep essential text away from the top, bottom, and right-side interaction controls.
@@ -91,9 +101,11 @@ Prefer deterministic local rendering with `ffmpeg`. Use ASS subtitles when suppo
 ## Validation
 
 - Use `ffprobe` to confirm 1080x1920, duration, frame rate, and an audio stream.
-- Extract at least two preview frames: near the opening and near the midpoint.
+- Extract at least three preview frames: near the opening, near the midpoint, and near the ending.
 - Inspect previews for stretching, cropping errors, unreadable text, collisions, subtitle cutoff, and vocabulary overlap.
+- For talking-head/original-audio clips, inspect those preview frames for mouth/audio/subtitle agreement: the opening must match the first spoken sentence, the midpoint must match the active cue, and the ending must match the final spoken sentence.
 - Confirm all overlapping subtitle rows appear and all teaching points are supported by the clip.
+- Confirm the first SRT cue included in ASS equals the first cue that overlaps the selected source timestamp. A missing opening cue, such as dropping an intro/welcome sentence, is a blocking failure.
 - Confirm MP4 and TXT share the intended episode/topic identity.
 - Confirm the TXT opens as UTF-8, follows the hook/explanation/example/vocabulary/CTA/hashtags order, and is ready to paste without cleanup.
 - Treat missing audio, subtitle omissions, visual overlap, unsupported vocabulary, mismatched copy, or a missing TXT as blocking failures.
@@ -101,3 +113,9 @@ Prefer deterministic local rendering with `ffmpeg`. Use ASS subtitles when suppo
 ## Scope boundary
 
 Create local deliverables only by default. Do not create Feishu documents, Wiki/Base records, covers, or study documents unless separately requested. Do not post to Xiaohongshu without explicit user authorization.
+
+## GitHub sync boundary
+
+- Only update or push the GitHub repository when the user explicitly asks to update/save/upload a skill.
+- Routine video generation, subtitle repair, article drafting, or local cleanup must not push to GitHub.
+- When a skill is updated and the user asks to sync it, push only the skill-related files that were intentionally changed.
